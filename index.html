@@ -4,44 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: monospace;
+        }
+
+        .textos {
+            position: absolute;
+            list-style: none;
+
+            li {
+                margin: 0 0 1rem;
+                width: auto;
+                padding: .5rem;
+                background-color: #f3f3f3;
+                border-radius: .4rem;
+                box-shadow: .2rem .2rem .6rem gray;
+            }
+        }
+
+        .container {
+            display: flex;
+            align-items: end;
+            height: 100vh;
+        }
+
+        .content {
+            display: flex;
+            width: 100%;
+            padding: .3rem;
+            background-color: gray;
+        }
+
+        form {
+            width: 95%;
+        }
+
+        .container input {
+            width: 95%;
+            border-radius: .3rem;
+            border: none;
+            padding: .1rem;
+        }
+
+        .container input:active,
+        input:valid,
+        input::selection {
+            border: none;
+        }
+
+        .container .btn {
+            width: 5%;
+            margin: 0 .2rem 0;
+        }
+
+        .btn #btn {
+            width: 100%;
+            height: 100%;
+            padding: .3rem;
+            border-radius: 1000px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .3s ease-in;
+
+            img {
+                width: 1rem;
+                height: 1rem;
+            }
+        }
+
+        .btn #btn:hover {
+            cursor: pointer;
+            box-shadow: .3rem .3rem 0rem black;
+        }
+    </style>
 </head>
 
 <body>
     <div class="resposta">
         <ul class="textos">
-            <li>Texto</li>
+            <li>WebSockets</li>
         </ul>
     </div>
     <div class="container">
         <div class="content">
-            <input type="text" id="text">
+            <form action=""><input type="text" id="text" autocomplete="off"></form>
             <div class="btn">
-                <button id="btn"><img src="scr/share-solid.svg" alt=""></button>
+                <button id="btn"><img src="scr/share-solid.svg" alt=""><img src="" alt=""></button>
             </div>
         </div>
     </div>
 
-    <script src=""></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
         const $ = (element) => {
             return document.querySelector(element)
         }
         const btn = $('#btn')
-        const ul = $('.textos')
+        const caixaTexto = $('.textos')
         const msgText = $('#text')
-        btn.addEventListener('click', () => {
+
+        var socket = io();
+
+        socket.on('message', (msg) => {
+            const li = document.createElement('li')
+            li.textContent = msg
+            caixaTexto.appendChild(li)
+        })
+
+        btn.addEventListener('click', (e) => {
+            // e.priventDefault
             if (msgText.value === '') {
                 alert('digite algo')
             } else {
-                const Mensagem = document.createElement('li')
-                Mensagem.textContent = msgText.value
-                ul.appendChild(Mensagem)
-
+                socket.emit('message', msgText.value)
                 msgText.value = ''
             }
-        })</script>
+        })
+
+        document.addEventListener('submit', (e) => {
+            if (msgText.value === '') {
+                alert('digite algo')
+            } else {
+                e.preventDefault();
+                socket.emit('message', msgText.value)
+                msgText.value = ''
+            }
+        })
+    </script>
 </body>
 
 </html>

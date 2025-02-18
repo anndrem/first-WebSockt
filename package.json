@@ -1,13 +1,18 @@
 {
-  "name": "testwebsockts",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
+    "tsx": "^4.19.2"
+  },
+  "name": "first-websockt",
   "version": "1.0.0",
+  "description": "Aprendendo a criar repositorios e codando um chat em tempo real \r Estou Alterando esta linha pelo site, IMPRESSIONANTE!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "watch "
+    "dev": "tsx watch server.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": ""
+  "license": "ISC"
 }
